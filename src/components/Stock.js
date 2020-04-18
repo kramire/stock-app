@@ -12,17 +12,29 @@ const StockSymbol = styled.h2`
   font-size: 32px;
   letter-spacing: 2px;
   margin: 0.25em 0;
+
+  @media (max-width: 767px) {
+    font-size: 24px;
+  }
 `;
 
 const Price = styled.h1`
   font-size: 48px;
   margin-bottom: 15px;
+
+  @media (max-width: 767px) {
+    font-size: 26px;
+  }
 `;
 
 const Change = styled.div`
   font-size: 28px;
   margin-bottom: 10px;
   font-weight: bold;
+
+  @media (max-width: 767px) {
+    font-size: 18px;
+  }
 `;
 
 const DataContainer = styled.div`
@@ -55,6 +67,7 @@ export const Stock = ({ stockData }) => {
   };
 
   const isUp = data.c - data.pc >= 0;
+  const price = data.c.toFixed(2);
 
   return (
     <StockContainer
@@ -72,7 +85,7 @@ export const Stock = ({ stockData }) => {
       </StockHeader>
       {data && (
         <DataContainer isUp={isUp}>
-          <Price>{data.c.toFixed(2)}</Price>
+          <Price>{price}</Price>
           <Change>{Math.round(data.c - data.pc).toFixed(2)}</Change>
           <Change>{(((data.c - data.pc) * 100) / data.pc).toFixed(2)}%</Change>
         </DataContainer>

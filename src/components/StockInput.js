@@ -9,6 +9,10 @@ const InputForm = styled.form`
   row-gap: 1em;
   margin: 2em;
   height: 3em;
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr 1fr;
+  }
 `;
 
 const Input = styled.input`
@@ -16,7 +20,8 @@ const Input = styled.input`
   font-weight: bold;
   letter-spacing: 2px;
   color: black;
-  border: non;
+  border: none;
+  width: 100%;
 
   :focus {
     outline: none;
@@ -43,13 +48,20 @@ const RefreshTime = styled.span`
   font-size: 18px;
   font-style: italic;
   text-align: right;
+
+  @media (max-width: 767px) {
+    grid-column-end: span 2;
+    text-align: center;
+    font-size: 16px;
+  }
 `;
 
 export const StockInput = ({ refreshedAt }) => {
   const [input, setInput] = useState("");
   const { stockList, setStockList } = useContext(StockContext);
 
-  const handleStockInput = stock => {
+  const handleStockInput = input => {
+    const stock = input.toUpperCase();
     if (!stockList.find(el => el === stock)) {
       setStockList([...stockList, stock]);
     }
@@ -71,7 +83,9 @@ export const StockInput = ({ refreshedAt }) => {
       }}
     >
       <Input type="text" onChange={handleChange} value={input} />
-      <Button type="submit">Add Stock</Button>
+      <Button type="submit" disabled={input === ""}>
+        Add Stock
+      </Button>
       <RefreshTime>Refreshed At: {formatTime(refreshedAt)}</RefreshTime>
     </InputForm>
   );

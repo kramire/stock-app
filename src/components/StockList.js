@@ -8,12 +8,16 @@ const StockListContainer = styled.div`
   column-gap: 1em;
   row-gap: 1em;
   margin: 2em;
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr 1fr;
+  }
 `;
 
 export const StockList = ({ quotes }) => (
   <StockListContainer>
-    {quotes.map(quote => (
-      <Stock key={quote.symbol} stockData={quote} />
-    ))}
+    {quotes.map(
+      quote => quote && <Stock key={quote.symbol} stockData={quote} />
+    )}
   </StockListContainer>
 );
