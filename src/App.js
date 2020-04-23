@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext } from "react";
 import { StockInput } from "./components/StockInput";
 import { StockList } from "./components/StockList";
 import { Spinner } from "./components/Loading";
-import { getQuotes } from "./api";
+import { getQuotes, getOneQuote } from "./api";
 
 export const StockContext = createContext();
 
@@ -10,6 +10,16 @@ const App = () => {
   const [stockList, setStockList] = useState(["AAPL"]);
   const [quotes, setQuotes] = useState([]);
   const [refreshedAt, setRefreshedAt] = useState(new Date());
+
+  const checkValidStock = async (symbol) => {
+    const result = await getOneQuote(symbol);
+    if (!result) {
+      console.log("No Result");
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   useEffect(() => {
     const fetchStockData = async () => {
@@ -37,7 +47,8 @@ const App = () => {
         quotes: quotes,
         setQuotes: setQuotes,
         stockList: stockList,
-        setStockList: setStockList
+        setStockList: setStockList,
+        checkValidStock: checkValidStock,
       }}
     >
       <StockInput refreshedAt={refreshedAt} />

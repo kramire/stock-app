@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { StockContext } from "../App";
+import { formatTime } from "../utils";
 import styled from "styled-components";
 
 const InputForm = styled.form`
@@ -35,7 +36,7 @@ const Button = styled.button`
   background-color: grey;
   color: white;
 
-  : hover {
+  :hover {
     background-color: #adadad;
   }
 
@@ -58,25 +59,23 @@ const RefreshTime = styled.span`
 
 export const StockInput = ({ refreshedAt }) => {
   const [input, setInput] = useState("");
-  const { stockList, setStockList } = useContext(StockContext);
+  const { stockList, setStockList, checkValidStock } = useContext(StockContext);
 
-  const handleStockInput = input => {
-    const stock = input.toUpperCase();
-    if (!stockList.find(el => el === stock)) {
-      setStockList([...stockList, stock]);
+  const handleStockInput = async (input) => {
+    const symbol = input.toUpperCase();
+    if (!stockList.find((el) => el === symbol)) {
+      const result = await checkValidStock(symbol);
+      if (result) {
+        setStockList([...stockList, symbol]);
+      }
     }
   };
 
-  const handleChange = e => setInput(e.target.value);
-
-  const formatTime = time => {
-    if (!time) return "N/A";
-    return `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`;
-  };
+  const handleChange = (e) => setInput(e.target.value);
 
   return (
     <InputForm
-      onSubmit={e => {
+      onSubmit={(e) => {
         e.preventDefault();
         setInput("");
         handleStockInput(input);
