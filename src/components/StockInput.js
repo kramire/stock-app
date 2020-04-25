@@ -69,23 +69,36 @@ const RefreshTime = styled.span`
 
 export const StockInput = ({ refreshedAt }) => {
   const [input, setInput] = useState("");
-  const { stockList, setStockList, checkValidStock } = useContext(StockContext);
+  const { stockList, setStockList, checkValidStock, addMsg } = useContext(
+    StockContext
+  );
 
-  const handleStockSubmit = async (input) => {
-    if (stockList.length === 12) return;
+  const handleStockSubmit = async input => {
+    if (stockList.length === 12) {
+      addMsg("Limit 12 symbols", "bad");
+      return;
+    }
 
     const symbol = input.toUpperCase();
-    if (stockList.find((el) => el === symbol)) return;
+    if (stockList.find(el => el === symbol)) {
+      addMsg("Symbol already in list", "bad");
+      return;
+    }
 
     const result = await checkValidStock(symbol);
-    result && setStockList([...stockList, symbol]);
+    if (!result) {
+      addMsg("No symbol found", "bad");
+      return;
+    }
+
+    setStockList([...stockList, symbol]);
   };
 
-  const handleChange = (e) => setInput(e.target.value);
+  const handleChange = e => setInput(e.target.value);
 
   return (
     <InputForm
-      onSubmit={(e) => {
+      onSubmit={e => {
         e.preventDefault();
         setInput("");
         handleStockSubmit(input);

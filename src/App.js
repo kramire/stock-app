@@ -3,6 +3,7 @@ import { StockInput } from "./components/StockInput";
 import { StockList } from "./components/StockList";
 import { Spinner } from "./components/Loading";
 import { getQuotes, getOneQuote } from "./api";
+import { useNotifications } from "./hooks/useNotifications";
 
 export const StockContext = createContext();
 
@@ -10,8 +11,9 @@ const App = () => {
   const [stockList, setStockList] = useState(["AAPL"]);
   const [quotes, setQuotes] = useState([]);
   const [refreshedAt, setRefreshedAt] = useState(new Date());
+  const { messages, addMsg, removeMsg } = useNotifications();
 
-  const checkValidStock = async (symbol) => {
+  const checkValidStock = async symbol => {
     const result = await getOneQuote(symbol);
     if (!result) {
       console.log("No Result");
@@ -49,6 +51,9 @@ const App = () => {
         stockList: stockList,
         setStockList: setStockList,
         checkValidStock: checkValidStock,
+        messages: messages,
+        addMsg: addMsg,
+        removeMsg: removeMsg,
       }}
     >
       <StockInput refreshedAt={refreshedAt} />
