@@ -17,12 +17,12 @@ exports.handler = async (event, context) => {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type"
+        "Access-Control-Allow-Headers": "Content-Type",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     }))
     .catch(e => ({
       statusCode: 404,
-      body: JSON.stringify({ error: e.message })
+      body: JSON.stringify({ error: e.message }),
     }));
 };
