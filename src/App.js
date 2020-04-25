@@ -2,6 +2,7 @@ import React, { useState, useEffect, createContext } from "react";
 import { StockInput } from "./components/StockInput";
 import { StockList } from "./components/StockList";
 import { Spinner } from "./components/Loading";
+import { Toast } from "./components/Toast";
 import { getQuotes, getOneQuote } from "./api";
 import { useNotifications } from "./hooks/useNotifications";
 
@@ -53,9 +54,9 @@ const App = () => {
         checkValidStock: checkValidStock,
         messages: messages,
         addMsg: addMsg,
-        removeMsg: removeMsg,
       }}
     >
+      <Toast messages={messages} removeMsg={removeMsg} />
       <StockInput refreshedAt={refreshedAt} />
       {!quotes.length ? <Spinner /> : <StockList quotes={quotes} />}
     </StockContext.Provider>
