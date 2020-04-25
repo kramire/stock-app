@@ -6,6 +6,12 @@ const StockContainer = styled.div`
   border: 2px solid #333;
   border-radius: 5px;
   padding: 1em;
+
+  @media (max-width: 767px) {
+    :active {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+  }
 `;
 
 const StockSymbol = styled.h2`
@@ -54,6 +60,8 @@ const DeleteButton = styled.button`
   font-weight: bold;
   border: none;
   outline: none;
+  padding: 0;
+  margin: -0.25em;
 `;
 
 export const Stock = ({ stockData }) => {
@@ -68,16 +76,27 @@ export const Stock = ({ stockData }) => {
 
   const isUp = data.c - data.pc >= 0;
   const price = data.c.toFixed(2);
+  const BREAKPOINT = 767;
 
   return (
     <StockContainer
-      onMouseEnter={() => setShowDelete(true)}
-      onMouseLeave={() => setShowDelete(false)}
+      showDelete
+      onMouseEnter={() =>
+        window.innerWidth >= BREAKPOINT && setShowDelete(true)
+      }
+      onMouseLeave={() =>
+        window.innerWidth >= BREAKPOINT && setShowDelete(false)
+      }
+      onClick={() =>
+        window.innerWidth < BREAKPOINT && setShowDelete(!showDelete)
+      }
     >
       <StockHeader>
         <StockSymbol>{symbol}</StockSymbol>
         <DeleteButton
-          style={{ visibility: `${showDelete ? "visible" : "hidden"}` }}
+          style={{
+            visibility: `${showDelete ? "visible" : "hidden"}`,
+          }}
           onClick={handleDelete(symbol)}
         >
           X

@@ -5,14 +5,18 @@ import styled from "styled-components";
 
 const InputForm = styled.form`
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   column-gap: 1em;
   row-gap: 1em;
   margin: 2em;
   height: 3em;
 
+  @media (max-width: 1000px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   @media (max-width: 767px) {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 `;
 
@@ -20,9 +24,15 @@ const Input = styled.input`
   font-size: 20px;
   font-weight: bold;
   letter-spacing: 2px;
+  text-transform: uppercase;
   color: black;
   border: none;
   width: 100%;
+  grid-column: span 2;
+
+  @media (max-width: 1000px) {
+    grid-column: span 1;
+  }
 
   :focus {
     outline: none;
@@ -61,14 +71,14 @@ export const StockInput = ({ refreshedAt }) => {
   const [input, setInput] = useState("");
   const { stockList, setStockList, checkValidStock } = useContext(StockContext);
 
-  const handleStockInput = async (input) => {
+  const handleStockSubmit = async (input) => {
+    if (stockList.length === 12) return;
+
     const symbol = input.toUpperCase();
-    if (!stockList.find((el) => el === symbol)) {
-      const result = await checkValidStock(symbol);
-      if (result) {
-        setStockList([...stockList, symbol]);
-      }
-    }
+    if (stockList.find((el) => el === symbol)) return;
+
+    const result = await checkValidStock(symbol);
+    result && setStockList([...stockList, symbol]);
   };
 
   const handleChange = (e) => setInput(e.target.value);
@@ -78,7 +88,7 @@ export const StockInput = ({ refreshedAt }) => {
       onSubmit={(e) => {
         e.preventDefault();
         setInput("");
-        handleStockInput(input);
+        handleStockSubmit(input);
       }}
     >
       <Input type="text" onChange={handleChange} value={input} />
