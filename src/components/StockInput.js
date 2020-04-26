@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { StockContext } from "../App";
-import { Button, GridContainer } from "./Reusable";
+import { Button, GridContainer, FlexContainer } from "./Reusable";
 import { formatTime } from "../utils";
 import styled from "styled-components";
 
@@ -8,8 +8,26 @@ const FormWrapper = styled.form`
   > div {
     height: 3em;
 
-    @media (max-width: 767) {
+    @media (max-width: 767px) {
       height: 5em;
+    }
+  }
+`;
+
+const InnerContainer = styled(FlexContainer)`
+  @media (max-width: 767px) {
+    grid-column: span 1;
+
+    button,
+    span {
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    button,
+    span {
+      font-size: 14px;
     }
   }
 `;
@@ -23,10 +41,6 @@ const Input = styled.input`
   border: none;
   width: 100%;
   grid-column: span 2;
-
-  @media (max-width: 1000px) {
-    grid-column: span 1;
-  }
 
   :focus {
     outline: none;
@@ -43,16 +57,16 @@ const ClearButton = styled(Button)`
   font-size: 13px;
 `;
 
+const RefreshButton = styled(Button)`
+  width: 40%;
+  background-color: #4b633f;
+`;
+
 const RefreshTime = styled.span`
   font-size: 18px;
   font-style: italic;
   text-align: right;
-
-  @media (max-width: 767px) {
-    grid-column-end: span 2;
-    text-align: center;
-    font-size: 16px;
-  }
+  margin-left: 5px;
 `;
 
 export const StockInput = ({ refreshedAt }) => {
@@ -63,6 +77,7 @@ export const StockInput = ({ refreshedAt }) => {
     checkValidStock,
     addMsg,
     clearAllData,
+    refreshData,
   } = useContext(StockContext);
 
   const handleStockSubmit = async input => {
@@ -98,15 +113,20 @@ export const StockInput = ({ refreshedAt }) => {
     >
       <GridContainer>
         <Input type="text" onChange={handleChange} value={input} />
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <InnerContainer>
           <AddButton type="submit" disabled={input === ""}>
             Add Stock
           </AddButton>
           <ClearButton type="button" onClick={clearAllData}>
             Clear List
           </ClearButton>
-        </div>
-        <RefreshTime>Refreshed At: {formatTime(refreshedAt)}</RefreshTime>
+        </InnerContainer>
+        <InnerContainer>
+          <RefreshButton type="button" onClick={() => refreshData()}>
+            Refresh
+          </RefreshButton>
+          <RefreshTime>Refreshed At: {formatTime(refreshedAt)}</RefreshTime>
+        </InnerContainer>
       </GridContainer>
     </FormWrapper>
   );

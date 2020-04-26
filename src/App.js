@@ -35,18 +35,6 @@ const App = () => {
     stockList && fetchStockData();
   }, [stockList]);
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     const fetchStockData = async () => {
-  //       const data = await getQuotes(stockList);
-  //       setQuotes(data);
-  //     };
-  //     fetchStockData();
-  //     setRefreshedAt(new Date());
-  //   }, 30000);
-  //   return () => clearInterval(interval);
-  // }, [stockList]);
-
   return (
     <StockContext.Provider
       value={{
@@ -58,6 +46,7 @@ const App = () => {
         messages: messages,
         addMsg: addMsg,
         clearAllData: clearAllData,
+        refreshData: stocks.updateData,
       }}
     >
       <Toast messages={messages} removeMsg={removeMsg} />

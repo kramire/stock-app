@@ -19,7 +19,7 @@ export const useLocalStorage = (key, initVal, clearVal) => {
         case "remove":
           return data.filter(el => el !== newVal);
         default:
-          return data;
+          return data.slice();
       }
     };
     const updatedData = updateFunction();
