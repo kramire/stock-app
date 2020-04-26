@@ -9,6 +9,10 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 30%;
+
+  @media (max-width: 550px) {
+    width: 60%;
+  }
 `;
 
 const Message = styled.div`

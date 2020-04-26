@@ -9,7 +9,7 @@ const FormWrapper = styled.form`
     height: 3em;
 
     @media (max-width: 767px) {
-      height: 10em;
+      height: 8em;
     }
   }
 `;
