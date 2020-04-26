@@ -5,11 +5,12 @@ import { Spinner } from "./components/Loading";
 import { Toast } from "./components/Toast";
 import { getQuotes, getOneQuote } from "./api";
 import { useNotifications } from "./hooks/useNotifications";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 
 export const StockContext = createContext();
 
 const App = () => {
-  const [stockList, setStockList] = useState(["AAPL"]);
+  const { stockList, updateStocks } = useLocalStorage(["AAPL"]);
   const [quotes, setQuotes] = useState([]);
   const [refreshedAt, setRefreshedAt] = useState(new Date());
   const { messages, addMsg, removeMsg } = useNotifications();
@@ -50,7 +51,7 @@ const App = () => {
         quotes: quotes,
         setQuotes: setQuotes,
         stockList: stockList,
-        setStockList: setStockList,
+        updateStocks: updateStocks,
         checkValidStock: checkValidStock,
         messages: messages,
         addMsg: addMsg,

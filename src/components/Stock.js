@@ -67,12 +67,9 @@ const DeleteButton = styled.button`
 export const Stock = ({ stockData }) => {
   const [showDelete, setShowDelete] = useState(false);
   const { symbol, data } = stockData;
-  const { stockList, setStockList } = useContext(StockContext);
+  const { updateStocks } = useContext(StockContext);
 
-  const handleDelete = symbol => () => {
-    const newStockList = stockList.filter(el => el !== symbol);
-    setStockList(newStockList);
-  };
+  const handleDelete = symbol => () => updateStocks(symbol, "remove");
 
   const isUp = data.c - data.pc >= 0;
   const price = data.c.toFixed(2);

@@ -69,7 +69,7 @@ const RefreshTime = styled.span`
 
 export const StockInput = ({ refreshedAt }) => {
   const [input, setInput] = useState("");
-  const { stockList, setStockList, checkValidStock, addMsg } = useContext(
+  const { stockList, updateStocks, checkValidStock, addMsg } = useContext(
     StockContext
   );
 
@@ -91,7 +91,7 @@ export const StockInput = ({ refreshedAt }) => {
       return;
     }
 
-    setStockList([...stockList, symbol]);
+    updateStocks(symbol, "add");
   };
 
   const handleChange = e => setInput(e.target.value);
