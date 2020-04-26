@@ -9,7 +9,7 @@ const FormWrapper = styled.form`
     height: 3em;
 
     @media (max-width: 767px) {
-      height: 8em;
+      height: 10em;
     }
   }
 `;
@@ -118,12 +118,20 @@ export const StockInput = ({ refreshedAt }) => {
           <AddButton type="submit" disabled={input === ""}>
             Add Stock
           </AddButton>
-          <ClearButton type="button" onClick={clearAllData}>
+          <ClearButton
+            type="button"
+            disabled={!stockList.length}
+            onClick={clearAllData}
+          >
             Clear List
           </ClearButton>
         </InnerContainer>
         <InnerContainer>
-          <RefreshButton type="button" onClick={() => refreshData()}>
+          <RefreshButton
+            type="button"
+            disabled={!stockList.length}
+            onClick={refreshData}
+          >
             Refresh
           </RefreshButton>
           <RefreshTime>Refreshed At: {formatTime(refreshedAt)}</RefreshTime>

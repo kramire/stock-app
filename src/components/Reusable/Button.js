@@ -8,11 +8,20 @@ export const Button = styled.button`
   color: white;
 
   :hover {
-    background-color: #adadad;
     cursor: pointer;
+  }
+
+  :active {
+    background-color: #adadad;
   }
 
   :focus {
     outline: none;
+  }
+
+  @media (min-width: 767px) {
+    :hover {
+      background-color: #adadad;
+    }
   }
 `;
