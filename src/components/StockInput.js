@@ -9,14 +9,14 @@ const FormWrapper = styled.form`
     height: 3em;
 
     @media (max-width: 767px) {
-      height: 5em;
+      height: 8em;
     }
   }
 `;
 
 const InnerContainer = styled(FlexContainer)`
   @media (max-width: 767px) {
-    grid-column: span 1;
+    grid-column: span 2;
 
     button,
     span {
@@ -67,6 +67,7 @@ const RefreshTime = styled.span`
   font-style: italic;
   text-align: right;
   margin-left: 5px;
+  align-self: center;
 `;
 
 export const StockInput = ({ refreshedAt }) => {
