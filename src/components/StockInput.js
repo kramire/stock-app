@@ -1,22 +1,16 @@
 import React, { useState, useContext } from "react";
 import { StockContext } from "../App";
+import { Button, GridContainer } from "./Reusable";
 import { formatTime } from "../utils";
 import styled from "styled-components";
 
-const InputForm = styled.form`
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  column-gap: 1em;
-  row-gap: 1em;
-  margin: 2em;
-  height: 3em;
+const FormWrapper = styled.form`
+  > div {
+    height: 3em;
 
-  @media (max-width: 1000px) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  @media (max-width: 767px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    @media (max-width: 767) {
+      height: 5em;
+    }
   }
 `;
 
@@ -39,20 +33,14 @@ const Input = styled.input`
   }
 `;
 
-const Button = styled.button`
-  border-radius: 5px;
-  font-size: 16px;
-  border: none;
-  background-color: grey;
-  color: white;
+const AddButton = styled(Button)`
+  width: 65%;
+`;
 
-  :hover {
-    background-color: #adadad;
-  }
-
-  :focus {
-    outline: none;
-  }
+const ClearButton = styled(Button)`
+  width: 30%;
+  background-color: #333;
+  font-size: 13px;
 `;
 
 const RefreshTime = styled.span`
@@ -69,9 +57,13 @@ const RefreshTime = styled.span`
 
 export const StockInput = ({ refreshedAt }) => {
   const [input, setInput] = useState("");
-  const { stockList, updateStocks, checkValidStock, addMsg } = useContext(
-    StockContext
-  );
+  const {
+    stockList,
+    updateStocks,
+    checkValidStock,
+    addMsg,
+    clearAllData,
+  } = useContext(StockContext);
 
   const handleStockSubmit = async input => {
     if (stockList.length === 12) {
@@ -97,18 +89,25 @@ export const StockInput = ({ refreshedAt }) => {
   const handleChange = e => setInput(e.target.value);
 
   return (
-    <InputForm
+    <FormWrapper
       onSubmit={e => {
         e.preventDefault();
         setInput("");
         handleStockSubmit(input);
       }}
     >
-      <Input type="text" onChange={handleChange} value={input} />
-      <Button type="submit" disabled={input === ""}>
-        Add Stock
-      </Button>
-      <RefreshTime>Refreshed At: {formatTime(refreshedAt)}</RefreshTime>
-    </InputForm>
+      <GridContainer>
+        <Input type="text" onChange={handleChange} value={input} />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <AddButton type="submit" disabled={input === ""}>
+            Add Stock
+          </AddButton>
+          <ClearButton type="button" onClick={clearAllData}>
+            Clear List
+          </ClearButton>
+        </div>
+        <RefreshTime>Refreshed At: {formatTime(refreshedAt)}</RefreshTime>
+      </GridContainer>
+    </FormWrapper>
   );
 };

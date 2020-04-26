@@ -1,31 +1,36 @@
 import React, { useState, useEffect } from "react";
 
-export const useLocalStorage = initVal => {
-  const [stockList, setStockList] = useState(initVal);
+export const useLocalStorage = (key, initVal, clearVal) => {
+  const [data, setData] = useState(initVal);
 
   useEffect(() => {
-    const savedStocks = localStorage.getItem("stocks");
-    if (savedStocks && savedStocks !== "undefined") {
-      const parsedList = JSON.parse(savedStocks);
-      setStockList(parsedList);
+    const savedData = localStorage.getItem(key);
+    if (savedData && savedData !== "undefined") {
+      const parsedData = JSON.parse(savedData);
+      setData(parsedData);
     }
-  }, []);
+  }, [key]);
 
-  const updateStocks = (symbol, change) => {
+  const updateData = (newVal, change) => {
     const updateFunction = () => {
       switch (change) {
         case "add":
-          return [...stockList, symbol];
+          return [...data, newVal];
         case "remove":
-          return stockList.filter(el => el !== symbol);
+          return data.filter(el => el !== newVal);
         default:
-          return stockList;
+          return data;
       }
     };
-    const newStocks = updateFunction();
-    localStorage.setItem("stocks", JSON.stringify(newStocks));
-    setStockList(newStocks);
+    const updatedData = updateFunction();
+    localStorage.setItem("stocks", JSON.stringify(updatedData));
+    setData(updatedData);
   };
 
-  return { stockList, updateStocks };
+  const clearData = () => {
+    localStorage.clear();
+    setData(clearVal);
+  };
+
+  return { data, updateData, clearData };
 };

@@ -1,36 +1,38 @@
-import React, { useState, useEffect, createContext } from "react";
-import { StockInput } from "./components/StockInput";
-import { StockList } from "./components/StockList";
-import { Spinner } from "./components/Loading";
-import { Toast } from "./components/Toast";
+import React, { useState, useEffect, useRef, createContext } from "react";
+import { StockInput, StockList } from "./components";
+import { Spinner, Toast } from "./components/Reusable";
 import { getQuotes, getOneQuote } from "./api";
-import { useNotifications } from "./hooks/useNotifications";
-import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useNotifications, useLocalStorage } from "./hooks";
 
 export const StockContext = createContext();
 
 const App = () => {
-  const { stockList, updateStocks } = useLocalStorage(["AAPL"]);
+  const stocks = useLocalStorage("stocks", ["AAPL"], []);
+  const stockList = stocks.data;
   const [quotes, setQuotes] = useState([]);
   const [refreshedAt, setRefreshedAt] = useState(new Date());
   const { messages, addMsg, removeMsg } = useNotifications();
+  const dataLoadingRef = useRef(false);
 
   const checkValidStock = async symbol => {
     const result = await getOneQuote(symbol);
-    if (!result) {
-      console.log("No Result");
-      return false;
-    } else {
-      return true;
-    }
+    return !result ? false : true;
+  };
+
+  const clearAllData = () => {
+    stocks.clearData();
+    setQuotes([]);
   };
 
   useEffect(() => {
     const fetchStockData = async () => {
+      dataLoadingRef.current = true;
       const data = await getQuotes(stockList);
+      dataLoadingRef.current = false;
       setQuotes(data);
+      setRefreshedAt(new Date());
     };
-    fetchStockData();
+    stockList && fetchStockData();
   }, [stockList]);
 
   // useEffect(() => {
@@ -51,15 +53,20 @@ const App = () => {
         quotes: quotes,
         setQuotes: setQuotes,
         stockList: stockList,
-        updateStocks: updateStocks,
+        updateStocks: stocks.updateData,
         checkValidStock: checkValidStock,
         messages: messages,
         addMsg: addMsg,
+        clearAllData: clearAllData,
       }}
     >
       <Toast messages={messages} removeMsg={removeMsg} />
       <StockInput refreshedAt={refreshedAt} />
-      {!quotes.length ? <Spinner /> : <StockList quotes={quotes} />}
+      {dataLoadingRef.current ? (
+        <Spinner />
+      ) : (
+        quotes && quotes.length > 0 && <StockList quotes={quotes} />
+      )}
     </StockContext.Provider>
   );
 };

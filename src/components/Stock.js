@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import { StockContext } from "../App";
+import { DeleteButton } from "../components/Reusable";
 import styled from "styled-components";
 
 const StockContainer = styled.div`
@@ -15,7 +16,7 @@ const StockContainer = styled.div`
 `;
 
 const StockSymbol = styled.h2`
-  font-size: 32px;
+  font-size: 36px;
   letter-spacing: 2px;
   margin: 0.25em 0;
 
@@ -52,15 +53,8 @@ const StockHeader = styled.div`
   justify-content: space-between;
 `;
 
-const DeleteButton = styled.button`
-  background-color: transparent;
-  color: #ddd;
-  height: 50%;
+const StyledDeleteButton = styled(DeleteButton)`
   font-size: 20px;
-  font-weight: bold;
-  border: none;
-  outline: none;
-  padding: 0;
   margin: -0.25em;
 `;
 
@@ -90,14 +84,14 @@ export const Stock = ({ stockData }) => {
     >
       <StockHeader>
         <StockSymbol>{symbol}</StockSymbol>
-        <DeleteButton
+        <StyledDeleteButton
           style={{
             visibility: `${showDelete ? "visible" : "hidden"}`,
           }}
           onClick={handleDelete(symbol)}
         >
           X
-        </DeleteButton>
+        </StyledDeleteButton>
       </StockHeader>
       {data && (
         <DataContainer isUp={isUp}>

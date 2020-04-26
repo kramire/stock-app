@@ -1,4 +1,5 @@
 import React from "react";
+import { DeleteButton } from "./";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -29,17 +30,6 @@ const Message = styled.div`
   margin: 0.5em 0;
   display: flex;
   justify-content: space-between;
-`;
-
-const DeleteButton = styled.button`
-  background-color: transparent;
-  color: #ddd;
-  height: 50%;
-  font-size: 16px;
-  font-weight: bold;
-  border: none;
-  outline: none;
-  padding: 0;
 `;
 
 export const Toast = ({ messages, removeMsg }) => {
